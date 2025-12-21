@@ -40,7 +40,7 @@ const SignupForm = () => {
   const onSubmit = async (values: SignupFormValues) => {
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
     });
@@ -50,12 +50,18 @@ const SignupForm = () => {
       setError(errorMessage);
       return;
     }
-    console.log({ data });
     toast.success("Signedup successfully");
     navigate("/login");
-    console.log("SIGNUP", values);
   };
 
+  const signInWithGoogle = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+  };
   return (
     <div className="bg-linear-to-b from-[#8A2BE2] to-[#7B1FEA] w-screen min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-sm rounded-sm shadow-xl">
@@ -153,7 +159,11 @@ const SignupForm = () => {
             <Separator className="flex-1" />
           </div>
 
-          <Button variant="outline" className="w-full h-12 rounded-sm">
+          <Button
+            variant="outline"
+            onClick={signInWithGoogle}
+            className="w-full h-12 rounded-sm"
+          >
             <img
               src={assets.google_icon}
               alt="google icon"

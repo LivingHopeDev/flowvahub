@@ -1,3 +1,3 @@
 import google_icon from "./google-icon.png";
-
-export const assets = { google_icon };
+import flowva_logo from "./flowva_logo.png";
+export const assets = { google_icon, flowva_logo };

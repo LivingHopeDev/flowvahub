@@ -7,6 +7,8 @@ import NotFound from "./components/notFound";
 import LoginForm from "./pages/auth/login";
 import SignupForm from "./pages/auth/signup";
 import ProtectedLayout from "./layouts/protectedLayout";
+import DashboardLayout from "./layouts/dashboardLayout";
+import DashboardPage from "./pages/dashboard/dashboardPage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -17,11 +19,19 @@ function App() {
         { path: "/signup", element: <SignupForm /> },
 
         {
+          path: "/dashboard",
           element: <ProtectedLayout />,
+          errorElement: <ErrorFallback />,
+
           children: [
             {
-              path: "/dashboard",
-              element: <div>Dashboard</div>,
+              element: (
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <DashboardLayout />
+                </ErrorBoundary>
+              ),
+              errorElement: <ErrorFallback />,
+              children: [{ index: true, element: <DashboardPage /> }],
             },
           ],
         },
