@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Star, Share2, Gift, Copy, Check } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PointsBalance from "./_components/pointBalance";
@@ -29,10 +29,12 @@ const RewardsPage = () => {
 
   return (
     <div>
-      {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="w-full sm:w-auto">
-          <TabsTrigger value="earn" className="flex-1 sm:flex-initial">
+          <TabsTrigger
+            value="earn"
+            className="flex-1 border-b-2 sm:flex-initial"
+          >
             Earn Points
           </TabsTrigger>
           <TabsTrigger value="redeem" className="flex-1 sm:flex-initial">
@@ -45,60 +47,96 @@ const RewardsPage = () => {
             <h2 className="text-lg font-semibold mb-4">Your Rewards Journey</h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <Card>
-                <CardContent className="pt-6">
-                  <PointsBalance
-                    points={10}
-                    target={5000}
-                    nextReward="$5 Gift Card"
-                  />
-                </CardContent>
-              </Card>
+              <PointsBalance
+                points={10}
+                target={5000}
+                nextReward="$5 Gift Card"
+              />
 
-              <Card>
-                <CardContent className="pt-6">
-                  <DailyStreakTracker streak={2} daysOfWeek={daysOfWeek} />
-                </CardContent>
-              </Card>
+              <DailyStreakTracker streak={2} daysOfWeek={daysOfWeek} />
+
               <SpotlightCard />
             </div>
           </div>
 
-          {/* Earn More Points */}
           <div>
             <h2 className="text-lg font-semibold mb-4">Earn More Points</h2>
+            <div className="flex gap-4">
+              <Card className="relative w-100 h-40  overflow-hidden">
+                <div className="absolute inset-0">
+                  <div className="h-[45%] bg-white" />
+                  <div className="h-[55%] bg-gray-100" />
+                </div>
 
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
-                    <Star className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold mb-1">
-                      Refer and win 10,000 points!
-                    </h3>
+                <div className="relative z-10 space-y-2">
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <div className="h-10 w-10 rounded-sm bg-purple-100 flex items-center justify-center shrink-0">
+                        <Star className="h-8 w-8 text-purple-600" />
+                      </div>
+                      <h3 className="font-medium">
+                        Refer and win 10,000 points!
+                      </h3>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent>
                     <p className="text-sm text-muted-foreground">
                       Invite 3 friends by Nov 20 and earn a chance to be one of
-                      5 winners of{" "}
+                      5 winners of
                       <span className="text-purple-600 font-medium">
                         10,000 points
                       </span>
                       . Friends must complete onboarding to qualify.
                     </p>
-                  </div>
+                  </CardContent>
                 </div>
-              </CardContent>
-            </Card>
+              </Card>
+
+              <Card className="relative w-100 h-40 overflow-hidden">
+                <div className="absolute inset-0">
+                  <div className="h-[45%] bg-white" />
+                  <div className="h-[55%] bg-gray-100" />
+                </div>
+
+                <div className="relative z-10">
+                  <CardHeader>
+                    <div className="flex items-center gap-2 ">
+                      <div className="h-10 w-10 rounded-sm bg-purple-100 flex items-center justify-center shrink-0">
+                        <Share2 className="h-8 w-8 text-purple-600" />
+                      </div>
+                      <div className="pb-">
+                        <h3 className="font-medium">Share Your Link</h3>
+                        <span className="text-sm text-muted-foreground">
+                          Earn +25 pts
+                        </span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col items-start gap-4">
+                      <div className="flex items-center justify-between w-full">
+                        <p className="text-base text-muted-foreground">
+                          Share your tool stack
+                        </p>
+
+                        <Button className="rounded-full bg-paleBlue border cursor-pointer text-blueViolet hover:bg-blueViolet hover:text-white">
+                          <Share2 />
+                          Share
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </div>
+              </Card>
+            </div>
           </div>
 
-          {/* Refer & Earn */}
           <div>
             <h2 className="text-lg font-semibold mb-4">Refer & Earn</h2>
 
             <Card>
               <CardContent className="pt-6 space-y-6">
-                {/* Share Your Link */}
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <Share2 className="h-5 w-5 text-purple-500" />
@@ -107,15 +145,30 @@ const RewardsPage = () => {
                       Earn +25 pts
                     </span>
                   </div>
+                </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <div className="flex-1 bg-muted rounded-lg p-3 text-sm font-mono break-all">
-                      https://app.flowuin.com/signup?ref=sarah123
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blueViolet">0</div>
+                    <div className="text-sm text-muted-foreground">
+                      Referrals
                     </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blueViolet">0</div>
+                    <div className="text-sm text-muted-foreground">
+                      Points Earned
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <h4 className="text-base">Your personal referral link:</h4>
+                  <div className="flex items-center justify-between bg-muted rounded-lg p-3 text-sm break-all">
+                    https://app.flowuin.com/signup?ref=sarah123
                     <Button
                       onClick={handleCopyLink}
-                      variant="outline"
-                      className="sm:w-auto"
+                      className="bg-transparent sm:w-auto"
                     >
                       {copied ? (
                         <>
@@ -124,47 +177,10 @@ const RewardsPage = () => {
                         </>
                       ) : (
                         <>
-                          <Copy className="h-4 w-4 mr-2" />
-                          Copy
+                          <Copy className="h-4 w-4 mr-2 text-blueViolet" />
                         </>
                       )}
                     </Button>
-                  </div>
-                </div>
-
-                {/* Share Your Stack */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Gift className="h-5 w-5 text-purple-500" />
-                      <h3 className="font-semibold">Share Your Stack</h3>
-                      <span className="text-sm text-muted-foreground">
-                        Earn +10 pts
-                      </span>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      <Share2 className="h-4 w-4 mr-2" />
-                      Share
-                    </Button>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Share your tool stack
-                  </p>
-                </div>
-
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold">0</div>
-                    <div className="text-sm text-muted-foreground">
-                      Referrals
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold">0</div>
-                    <div className="text-sm text-muted-foreground">
-                      Points Earned
-                    </div>
                   </div>
                 </div>
               </CardContent>
