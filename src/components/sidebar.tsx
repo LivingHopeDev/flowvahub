@@ -1,74 +1,32 @@
-import { useState } from "react";
-import {
-  Menu,
-  Home,
-  Compass,
-  Library,
-  Layers,
-  CreditCard,
-  Gift,
-  Settings,
-  X,
-} from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { assets } from "@/assets/assets";
 import { Separator } from "@radix-ui/react-separator";
+import { navItems } from "@/routes";
 
-const navItems = [
-  { label: "Home", icon: Home, href: "/dashboard" },
-  { label: "Discover", icon: Compass, href: "/dashboard/discover" },
-  { label: "Library", icon: Library, href: "/dashboard/library" },
-  { label: "Tech Stack", icon: Layers, href: "/dashboard/tech-stack" },
-  {
-    label: "Subscriptions",
-    icon: CreditCard,
-    href: "/dashboard/subscriptions",
-  },
-  {
-    label: "Rewards Hub",
-    icon: Gift,
-    href: "/dashboard/rewards",
-    active: true,
-  },
-  { label: "Settings", icon: Settings, href: "/dashboard/settings" },
-];
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
 
-const Sidebar = () => {
-  const [open, setOpen] = useState(false);
-
-  const handleNavigate = () => {
-    setOpen(false);
-  };
+const Sidebar = ({ open, onClose }: SidebarProps) => {
+  const handleNavigate = () => onClose();
 
   return (
     <>
-      {/* Mobile Header  */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 border-b bg-white md:hidden">
-        <div className="flex items-center justify-between w-full px-4">
-          <img
-            src={assets.flowva_logo}
-            alt="Flowva Logo"
-            className="w-50 h-20"
-          />
-          <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
-            <Menu />
-          </Button>
-        </div>
-      </header>
-
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/40 md:hidden"
-          onClick={() => setOpen(false)}
+          onClick={onClose}
         />
       )}
 
       <aside
         className={cn(
-          "fixed z-50 inset-y-0 left-0 w-64 bg-white border-r transition-transform duration-300",
+          "fixed z-50 inset-y-0 left-0 w-64 bg-white border-r overflow-y-auto transition-transform duration-300",
           open ? "translate-x-0" : "-translate-x-full",
-          "md:static md:translate-x-0"
+          "md:static md:translate-x-0 z-60"
         )}
       >
         {/* Sidebar Header */}
@@ -82,7 +40,7 @@ const Sidebar = () => {
             variant="ghost"
             size="icon"
             className="md:hidden"
-            onClick={() => setOpen(false)}
+            onClick={onClose}
           >
             <X />
           </Button>
@@ -113,7 +71,7 @@ const Sidebar = () => {
 
         {/* User Footer */}
         <div className="absolute bottom-0 w-full px-4 py-4 space-y-5">
-          <Separator className="border border-gray-400 " />
+          <Separator className="border border-gray-400" />
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-200 text-sm font-semibold text-blueViolet">
               S

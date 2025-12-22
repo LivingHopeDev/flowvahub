@@ -9,6 +9,7 @@ import SignupForm from "./pages/auth/signup";
 import ProtectedLayout from "./layouts/protectedLayout";
 import DashboardLayout from "./layouts/dashboardLayout";
 import DashboardPage from "./pages/dashboard/dashboardPage";
+import RewardsPage from "./pages/dashboard/rewardHub/rewardPage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -31,7 +32,10 @@ function App() {
                 </ErrorBoundary>
               ),
               errorElement: <ErrorFallback />,
-              children: [{ index: true, element: <DashboardPage /> }],
+              children: [
+                { index: true, element: <DashboardPage /> },
+                { path: "rewards", element: <RewardsPage /> },
+              ],
             },
           ],
         },
