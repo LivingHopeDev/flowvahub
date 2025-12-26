@@ -10,6 +10,12 @@ import ProtectedLayout from "./layouts/protectedLayout";
 import DashboardLayout from "./layouts/dashboardLayout";
 import DashboardPage from "./pages/dashboard/dashboardPage";
 import RewardsPage from "./pages/dashboard/rewardHub/rewardPage";
+import SettingsPage from "./pages/dashboard/settings/settingsPage";
+import DiscoverPage from "./pages/dashboard/discover/discoverPage";
+import SubscriptionPage from "./pages/dashboard/subscription/subscriptionPage";
+import LibraryPage from "./pages/dashboard/library/libraryPage";
+import TechStackPage from "./pages/dashboard/techStack/techStackPage";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -35,6 +41,11 @@ function App() {
               children: [
                 { index: true, element: <DashboardPage /> },
                 { path: "rewards", element: <RewardsPage /> },
+                { path: "discover", element: <DiscoverPage /> },
+                { path: "subscriptions", element: <SubscriptionPage /> },
+                { path: "library", element: <LibraryPage /> },
+                { path: "settings", element: <SettingsPage /> },
+                { path: "tech-stack", element: <TechStackPage /> },
               ],
             },
           ],

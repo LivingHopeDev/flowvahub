@@ -25,7 +25,7 @@ const RedeemPoints = ({ rewards, onRedeem }: RedeemPointsProps) => {
       visa: Gift,
     };
     const Icon = iconMap[iconType as keyof typeof iconMap] || Gift;
-    return <Icon className="h-6 w-6 text-purple-600" />;
+    return <Icon className="h-6 w-6 text-blueViolet" />;
   };
 
   const allRewardsCount = rewards.length;
@@ -37,25 +37,43 @@ const RedeemPoints = ({ rewards, onRedeem }: RedeemPointsProps) => {
 
   return (
     <section>
-      <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-900 border-l-4 border-purple-600 pl-3">
+      <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-900 border-l-4 border-blueViolet pl-3">
         Redeem Your Points
       </h2>
 
-      {/* Tabs */}
       <Tabs defaultValue="all" className="mb-6">
-        <TabsList className="bg-transparent border-b border-gray-200 rounded-none w-full justify-start h-auto p-0">
+        <TabsList className="bg-transparent border-b border-gray-200 rounded-none inline-flex justify-start h-auto p-0 w-fit">
           <TabsTrigger
             value="all"
-            className="data-[state=active]:border-b-2 data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 rounded-none bg-transparent px-4 py-2 data-[state=active]:bg-transparent"
+            className="border-0 border-b-2
+    data-[state=active]:border-b-blueViolet
+    data-[state=active]:text-blueViolet
+rounded-t-md rounded-b-none
+    bg-transparent
+    px-4 py-2
+    data-[state=active]:bg-purple-100
+    focus-visible:ring-0
+  "
           >
             All Rewards
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-600">
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-purple-100 text-blueViolet">
               {allRewardsCount}
             </span>
           </TabsTrigger>
+
           <TabsTrigger
             value="unlocked"
-            className="data-[state=active]:border-b-2 data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 rounded-none bg-transparent px-4 py-2 data-[state=active]:bg-transparent"
+            className="
+    border-0 border-b-2
+    data-[state=active]:border-b-blueViolet
+    data-[state=active]:text-blueViolet
+rounded-t-md rounded-b-none
+    bg-transparent
+    px-4 py-2
+    data-[state=active]:bg-purple-100
+    
+    focus-visible:ring-0
+  "
           >
             Unlocked
             <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">
@@ -64,7 +82,16 @@ const RedeemPoints = ({ rewards, onRedeem }: RedeemPointsProps) => {
           </TabsTrigger>
           <TabsTrigger
             value="locked"
-            className="data-[state=active]:border-b-2 data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 rounded-none bg-transparent px-4 py-2 data-[state=active]:bg-transparent"
+            className="
+    border-0 border-b-2
+    data-[state=active]:border-b-blueViolet
+    data-[state=active]:text-blueViolet
+rounded-t-md rounded-b-none
+    bg-transparent
+    px-4 py-2
+    data-[state=active]:bg-purple-100
+    focus-visible:ring-0
+  "
           >
             Locked
             <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">
@@ -73,7 +100,16 @@ const RedeemPoints = ({ rewards, onRedeem }: RedeemPointsProps) => {
           </TabsTrigger>
           <TabsTrigger
             value="coming-soon"
-            className="data-[state=active]:border-b-2 data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 rounded-none bg-transparent px-4 py-2 data-[state=active]:bg-transparent"
+            className="
+    border-0 border-b-2
+    data-[state=active]:border-b-blueViolet
+    data-[state=active]:text-blueViolet
+rounded-t-md rounded-b-none
+    bg-transparent
+    px-4 py-2
+    data-[state=active]:bg-purple-100
+    focus-visible:ring-0
+  "
           >
             Coming Soon
             <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">
@@ -83,7 +119,6 @@ const RedeemPoints = ({ rewards, onRedeem }: RedeemPointsProps) => {
         </TabsList>
       </Tabs>
 
-      {/* Rewards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {rewards.map((reward) => (
           <Card
@@ -91,30 +126,25 @@ const RedeemPoints = ({ rewards, onRedeem }: RedeemPointsProps) => {
             className="overflow-hidden rounded-xl border border-gray-200 p-0"
           >
             <div className="bg-white px-6 py-8 text-center space-y-4">
-              {/* Icon */}
               <div className="flex justify-center">
                 <div className="h-16 w-16 rounded-2xl bg-purple-100 flex items-center justify-center">
                   {getIcon(reward.icon)}
                 </div>
               </div>
 
-              {/* Title */}
               <h3 className="font-semibold text-base text-gray-900">
                 {reward.title}
               </h3>
 
-              {/* Description */}
               <p className="text-sm text-gray-600 leading-relaxed">
                 {reward.description}
               </p>
 
-              {/* Points */}
-              <div className="flex items-center justify-center gap-1 text-purple-600 font-semibold">
+              <div className="flex items-center justify-center gap-1 text-blueViolet font-semibold">
                 <span className="text-yellow-500">⭐</span>
                 <span>{reward.points_required} pts</span>
               </div>
 
-              {/* Action Button */}
               {reward.status === "locked" ? (
                 <Button
                   disabled
@@ -125,7 +155,7 @@ const RedeemPoints = ({ rewards, onRedeem }: RedeemPointsProps) => {
               ) : reward.status === "unlocked" ? (
                 <Button
                   onClick={() => onRedeem(reward.id)}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-5"
+                  className="w-full bg-blueViolet hover:bg-purple-700 text-white rounded-lg py-5"
                 >
                   Redeem
                 </Button>

@@ -31,7 +31,6 @@ const RewardsPage = () => {
     fetchRewardsCatalog,
     rewardsCatalog,
   } = useRewardsStore();
-  console.log({ rewardsCatalog });
   useEffect(() => {
     if (!user) return;
 

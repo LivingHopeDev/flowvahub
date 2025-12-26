@@ -48,3 +48,16 @@ export const canClaimToday = (lastCheckIn: string | null): boolean => {
 
   return today > lastCheckInDate;
 };
+
+export const getInitials = (name: string): string => {
+  const namesArray = name.trim().split(" ");
+  if (namesArray.length === 0) return "";
+
+  const firstInitial = namesArray[0].charAt(0).toUpperCase();
+  const lastInitial =
+    namesArray.length > 1
+      ? namesArray[namesArray.length - 1].charAt(0).toUpperCase()
+      : "";
+
+  return firstInitial + lastInitial;
+};
