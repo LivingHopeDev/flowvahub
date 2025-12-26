@@ -16,7 +16,7 @@ const RewardsPage = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState("earn");
   const [profile, setProfile] = useState<Profile | null>(null);
-
+  const [redeeming, setRedeeming] = useState(false);
   const [claiming, setClaiming] = useState<boolean>(false);
   const [openLevelUpModal, setOpenLevelUpModal] = useState<boolean>(false);
   const { user } = useAuthStore();
@@ -30,25 +30,25 @@ const RewardsPage = () => {
     subscribeToRewards,
     fetchRewardsCatalog,
     rewardsCatalog,
+    fetchUserRedemptions,
+    userRedemptions,
+    redeemReward,
   } = useRewardsStore();
   useEffect(() => {
     if (!user) return;
 
     const loadData = async () => {
       await fetchRewardsData(user.id);
+      await fetchRewardsCatalog();
+      await fetchUserRedemptions(user.id);
       const userProfile = await fetchUserProfile(user.id);
       setProfile(userProfile);
     };
-    const loadRewards = async () => {
-      await fetchRewardsCatalog(user.id);
-    };
-    loadRewards();
-    loadData();
 
+    loadData();
     const unsubscribe = subscribeToRewards(user.id);
     return () => unsubscribe();
-  }, [user, fetchRewardsData, fetchUserProfile, subscribeToRewards]);
-
+  }, [user]);
   const handleClaimPoints = async () => {
     if (!user || claiming) return;
 
@@ -79,14 +79,27 @@ const RewardsPage = () => {
     toast.success("Link copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
   };
+  const handleRedeemReward = async (rewardId: string) => {
+    if (!user || redeeming) return;
 
-  if (loading && !rewards) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blueViolet"></div>
-      </div>
-    );
-  }
+    setRedeeming(true);
+    try {
+      const result = await redeemReward(user.id, rewardId);
+
+      if (result.success) {
+        toast.success(" Reward Redeemed!");
+        await fetchRewardsData(user.id);
+        await fetchRewardsCatalog();
+        await fetchUserRedemptions(user.id);
+      } else {
+        toast.error("Redemption Failed");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setRedeeming(false);
+    }
+  };
 
   const daysOfWeek = getLast7Days(rewards?.last_check_in || null);
   const canClaim = canClaimToday(rewards?.last_check_in || null);
@@ -96,6 +109,14 @@ const RewardsPage = () => {
   const handleSocialShare = (socialMedia: string) => {
     console.log(socialMedia);
   };
+
+  if (loading && !rewards) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blueViolet"></div>
+      </div>
+    );
+  }
   return (
     <div className="w-full min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -335,7 +356,10 @@ const RewardsPage = () => {
         ) : (
           <RedeemPoints
             rewards={rewardsCatalog}
-            onRedeem={(id) => console.log("Redeem:", id)}
+            userPoints={rewards?.total_points || 0}
+            userRedemptions={userRedemptions.map((r: any) => r.reward_id)}
+            onRedeem={handleRedeemReward}
+            isRedeeming={redeeming}
           />
         )}
       </div>

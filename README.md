@@ -146,3 +146,5 @@ bun dev
 - Point transactions are immutable.
 
 - Each user can only be referred once.
+- Users can redeem a gift when they have up to the required points and the gift is unlocked.
+- Each user can only redeem one gift once.

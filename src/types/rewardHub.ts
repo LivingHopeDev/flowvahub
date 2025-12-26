@@ -57,7 +57,7 @@ export type RewardsStore = {
   handleDailyCheckIn: (userId: string) => Promise<any>;
   handleShareStack: (userId: string) => Promise<any>;
   subscribeToRewards: (userId: string) => () => void;
-  fetchRewardsCatalog: (userId: string) => Promise<void>;
+  fetchRewardsCatalog: () => Promise<void>;
   fetchUserRedemptions: (userId: string) => Promise<void>;
   fetchUserProfile: (userId: string) => Promise<any>;
   redeemReward: (

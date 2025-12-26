@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,49 +20,118 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { assets } from "@/assets/assets";
 import { signupSchema, type SignupFormValues } from "@/schemas/auth.schema";
 import { supabase } from "@/config/client";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/errorHandler";
 import { FormError } from "@/components/formError";
-import { useNavigate } from "react-router";
+
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [referralValid, setReferralValid] = useState<boolean | null>(null);
+  const [validatingReferral, setValidatingReferral] = useState<boolean>(false);
+
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: { email: "", password: "", confirmPassword: "" },
     mode: "onSubmit",
   });
 
+  // Validate referral code on mount
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    console.log("Referral code from URL:", ref);
+    if (ref) {
+      setReferralCode(ref);
+      validateReferralCode(ref);
+    }
+  }, [searchParams]);
+
+  const validateReferralCode = async (code: string) => {
+    setValidatingReferral(true);
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, referral_code")
+        .eq("referral_code", code);
+      if (error || !data) {
+        setReferralValid(false);
+        setError(
+          "Invalid referral code. Please check the link or sign up without a referral."
+        );
+      } else {
+        setReferralValid(true);
+        setError(null);
+      }
+    } catch (err) {
+      setReferralValid(false);
+      setError("Could not validate referral code.");
+    } finally {
+      setValidatingReferral(false);
+    }
+  };
+
   const onSubmit = async (values: SignupFormValues) => {
+    if (referralCode && referralValid === false) {
+      setError(
+        "Cannot sign up with invalid referral code. Please use a valid link or remove the referral code from the URL."
+      );
+      return;
+    }
+
     setLoading(true);
     setError(null);
-    const { error } = await supabase.auth.signUp({
+
+    const signupData: any = {
       email: values.email,
       password: values.password,
-    });
+    };
+
+    if (referralCode && referralValid) {
+      signupData.options = {
+        data: {
+          referral_code: referralCode,
+        },
+      };
+    }
+
+    const { error } = await supabase.auth.signUp(signupData);
+
     if (error) {
       setLoading(false);
       const errorMessage = getErrorMessage(error);
       setError(errorMessage);
       return;
     }
+
     toast.success("Success: Verification email sent.");
     navigate("/login");
   };
 
   const signInWithGoogle = async () => {
+    if (referralCode && referralValid) {
+      sessionStorage.setItem("pending_referral", referralCode);
+    }
+
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
   };
+
+  const canSubmit =
+    !validatingReferral && (referralCode ? referralValid === true : true);
+
   return (
     <div className="bg-linear-to-b from-[#8A2BE2] to-[#7B1FEA] w-screen min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-sm rounded-sm shadow-xl">
@@ -73,6 +143,12 @@ const SignupForm = () => {
         </CardHeader>
 
         <CardContent className="space-y-4">
+          {validatingReferral && (
+            <Alert>
+              <AlertDescription>Validating referral code...</AlertDescription>
+            </Alert>
+          )}
+
           <Form {...form}>
             {error && <FormError message={error} />}
 
@@ -144,9 +220,10 @@ const SignupForm = () => {
 
               <Button
                 type="submit"
-                className="bg-blueViolet hover:bg-purpleBlue cursor-pointer h-12 w-full rounded-full"
+                disabled={!canSubmit || loading}
+                className="bg-blueViolet hover:bg-purpleBlue cursor-pointer h-12 w-full rounded-full disabled:opacity-50"
               >
-                {loading ? "Creating Account..." : "  Sign up Account"}
+                {loading ? "Creating Account..." : "Sign up Account"}
               </Button>
             </form>
           </Form>
@@ -162,7 +239,8 @@ const SignupForm = () => {
           <Button
             variant="outline"
             onClick={signInWithGoogle}
-            className="w-full h-12 rounded-sm"
+            disabled={!canSubmit}
+            className="w-full h-12 rounded-sm disabled:opacity-50"
           >
             <img
               src={assets.google_icon}

@@ -208,12 +208,10 @@ const useRewardsStore = create<RewardsStore>((set, get) => ({
       const filters: RedemptionFilters = {
         all: catalog.length,
         unlocked: catalog.filter(
-          (r) => r.points_required <= currentPoints && r.status === "active"
+          (r) => r.status === "unlocked" && r.points_required <= currentPoints
         ).length,
-        locked: catalog.filter(
-          (r) => r.points_required > currentPoints && r.status === "active"
-        ).length,
-        comingSoon: catalog.filter((r) => r.status === "coming_soon").length,
+        locked: catalog.filter((r) => r.status === "locked").length,
+        comingSoon: catalog.filter((r) => r.status === "coming-soon").length,
       };
 
       set({
@@ -258,13 +256,12 @@ const useRewardsStore = create<RewardsStore>((set, get) => ({
       }
 
       await get().fetchRewardsData(userId);
-      await get().fetchRewardsCatalog(userId);
+      await get().fetchRewardsCatalog();
       await get().fetchUserRedemptions(userId);
 
       set({ loading: false });
       return { success: true, message: "Reward redeemed successfully!" };
     } catch (error: unknown) {
-      console.error("Error redeeming reward:", error);
       set({
         error: error instanceof Error ? error.message : "Unknown error",
         loading: false,

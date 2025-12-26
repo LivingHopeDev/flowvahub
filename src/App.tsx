@@ -15,7 +15,7 @@ import DiscoverPage from "./pages/dashboard/discover/discoverPage";
 import SubscriptionPage from "./pages/dashboard/subscription/subscriptionPage";
 import LibraryPage from "./pages/dashboard/library/libraryPage";
 import TechStackPage from "./pages/dashboard/techStack/techStackPage";
-
+import AuthCallback from "./pages/auth/authCallback";
 function App() {
   const router = createBrowserRouter([
     {
@@ -24,7 +24,7 @@ function App() {
         { path: "/", element: <LoginForm /> },
         { path: "/login", element: <LoginForm /> },
         { path: "/signup", element: <SignupForm /> },
-
+        { path: "/auth/callback", element: <AuthCallback /> },
         {
           path: "/dashboard",
           element: <ProtectedLayout />,
