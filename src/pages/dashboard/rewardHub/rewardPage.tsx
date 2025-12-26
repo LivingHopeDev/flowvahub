@@ -230,7 +230,6 @@ const RewardsPage = () => {
                   </div>
                 </div>
 
-                {/* Stats Section */}
                 <div className="bg-white px-6 py-6">
                   <div className="grid grid-cols-2 gap-8 mb-6">
                     <div className="text-center">
@@ -251,7 +250,6 @@ const RewardsPage = () => {
                     </div>
                   </div>
 
-                  {/* Referral Link Section */}
                   <div className="space-y-3">
                     <label className="text-sm font-medium text-gray-700">
                       Your personal referral link:
@@ -276,7 +274,6 @@ const RewardsPage = () => {
                     </div>
                   </div>
 
-                  {/* Social Share Buttons */}
                   <div className="flex items-center justify-center gap-3 mt-6">
                     <button
                       onClick={() => handleSocialShare("facebook")}

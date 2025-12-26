@@ -49,7 +49,7 @@ const SpotlightCard = () => {
         </div>
 
         <div className="flex gap-3 border-t pt-2">
-          <Link to="https://go.reclaim.ai/ur9i6g5eznps">
+          <Link to="https://go.reclaim.ai/ur9i6g5eznps" target="_blank">
             <Button className="flex-1 bg-blueViolet hover:bg-purpleBlue text-white rounded-full font-semibold py-5 border-0">
               <UserRoundPlus className="h-4 w-4" />
               Sign up
