@@ -50,7 +50,7 @@ const SignupForm = () => {
       setError(errorMessage);
       return;
     }
-    toast.success("Signedup successfully");
+    toast.success("Success: Verification email sent.");
     navigate("/login");
   };
 

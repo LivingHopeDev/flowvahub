@@ -36,7 +36,7 @@ export default function NotFoundPage() {
             className="w-full sm:w-auto font-medium"
             style={{ backgroundColor: "#8a2be2" }}
           >
-            <Link to="/">Go back home</Link>
+            <Link to="/dashboard">Go back home</Link>
           </Button>
 
           {/* <Button
