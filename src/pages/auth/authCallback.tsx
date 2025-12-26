@@ -9,12 +9,10 @@ const AuthCallback = () => {
 
   useEffect(() => {
     const handleCallback = async () => {
-      console.log("=== AUTH CALLBACK START ===");
       console.log(
         "sessionStorage contents:",
         sessionStorage.getItem("pending_referral")
       );
-      console.log("URL params:", searchParams.get("ref"));
 
       try {
         const {
@@ -44,7 +42,32 @@ const AuthCallback = () => {
 
           console.log("Found referrer:", referrerProfile);
 
-          // Rest of your code...
+          if (referrerProfile) {
+            await supabase.from("referrals").insert([
+              {
+                referrer_id: referrerProfile.id,
+                referred_id: user.id,
+                points_awarded: true,
+              },
+            ]);
+
+            await supabase.rpc("increment_rewards_points", {
+              uid: referrerProfile.id,
+              pts: 25,
+            });
+
+            await supabase.from("point_transactions").insert([
+              {
+                user_id: referrerProfile.id,
+                points: 25,
+                transaction_type: "referral",
+                description: "Referral bonus for inviting new user",
+              },
+            ]);
+
+            toast.success("Referral bonus applied!");
+          }
+          sessionStorage.removeItem("pending_referral");
         }
 
         navigate("/dashboard");

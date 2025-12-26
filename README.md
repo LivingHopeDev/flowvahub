@@ -34,16 +34,14 @@ Key functionalities include:
    - Earn 5 points per day
    - Streak tracking with visual indicators
 3. **Referral System**
-   - Earn 25 points per successful referral
+   - Earn 25 points per successful referral (for email and password signup)
    - Unique 8-character alphanumeric referral codes
 4. **Points Balance Tracking**
    - Real-time updates using Supabase Realtime
    - Progress visualization
-5. **Share Tool Stack Feature**
-   - Earn 25 points per share
-6. **Point Transactions**
+5. **Point Transactions**
    - Immutable transaction logs for auditing
-7. **Rewards Catalog**
+6. **Rewards Catalog**
    - Browse and redeem rewards based on points
 
 ---
