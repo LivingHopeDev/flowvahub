@@ -1,0 +1,40 @@
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rewards ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.point_transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.referrals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_shares ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rewards_catalog ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.reward_redemptions ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can view own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can view own rewards" ON public.rewards;
+DROP POLICY IF EXISTS "Users can insert own rewards" ON public.rewards;
+DROP POLICY IF EXISTS "Users can update own rewards" ON public.rewards;
+DROP POLICY IF EXISTS "Users can view own transactions" ON public.point_transactions;
+DROP POLICY IF EXISTS "Users can insert own transactions" ON public.point_transactions;
+DROP POLICY IF EXISTS "Users can view referrals where they are referrer" ON public.referrals;
+DROP POLICY IF EXISTS "Anyone can insert referrals" ON public.referrals;
+DROP POLICY IF EXISTS "System can update referrals" ON public.referrals;
+DROP POLICY IF EXISTS "Users can view own shares" ON public.user_shares;
+DROP POLICY IF EXISTS "Users can insert own shares" ON public.user_shares;
+DROP POLICY IF EXISTS "Anyone can view rewards catalog" ON public.rewards_catalog;
+DROP POLICY IF EXISTS "Users can view own redemptions" ON public.reward_redemptions;
+DROP POLICY IF EXISTS "Users can insert own redemptions" ON public.reward_redemptions;
+
+-- Create policies
+CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Users can view own rewards" ON public.rewards FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own rewards" ON public.rewards FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own rewards" ON public.rewards FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can view own transactions" ON public.point_transactions FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own transactions" ON public.point_transactions FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can view referrals where they are referrer" ON public.referrals FOR SELECT USING (auth.uid() = referrer_id);
+CREATE POLICY "Anyone can insert referrals" ON public.referrals FOR INSERT WITH CHECK (true);
+CREATE POLICY "System can update referrals" ON public.referrals FOR UPDATE USING (true);
+CREATE POLICY "Users can view own shares" ON public.user_shares FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own shares" ON public.user_shares FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Anyone can view rewards catalog" ON public.rewards_catalog FOR SELECT USING (true);
+CREATE POLICY "Users can view own redemptions" ON public.reward_redemptions FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own redemptions" ON public.reward_redemptions FOR INSERT WITH CHECK (auth.uid() = user_id);

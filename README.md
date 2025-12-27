@@ -59,6 +59,49 @@ Key functionalities include:
 
 ---
 
+## Database Setup
+
+### Running Migrations
+
+1. Link to your Supabase project:
+
+```bash
+   npx supabase link --project-ref YOUR_PROJECT_REF
+```
+
+Find your project ref in: **Supabase Dashboard → Project Settings → General → Project ID**
+
+2. Push migrations to your database:
+
+```bash
+   bun run db:push
+```
+
+3. Verify:
+   - Go to Supabase Dashboard → Table Editor
+   - You should see all tables (profiles, rewards, point_transactions, etc.)
+
+### Alternative: Manual Setup (No CLI)
+
+If you prefer not to use the CLI:
+
+1. Go to Supabase Dashboard → SQL Editor
+2. Run each migration file from `supabase/migrations/` in order:
+   - `20240101000001_initial_schema.sql`
+   - `20240101000002_functions_and_triggers.sql`
+   - `20240101000003_rls_policies.sql`
+   - `20240101000004_seed_data.sql`
+
+### Getting Your Database Connection String
+
+If using `--db-url` flag instead:
+
+- Go to Project Settings → Database → Connection String → URI
+- Copy the connection string
+- Run: `bun run db:push --db-url "your-connection-string"`
+
+---
+
 ## Prerequisites
 
 - Node.js >= 20.x (required for Bun)
